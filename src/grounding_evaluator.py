@@ -436,8 +436,7 @@ class GroundingGTEvaluator:
             ious, _ = _iou3d_par(all_gt_boxes,  # (gt, 6)
                 box_cxcyczwhd_to_xyzxyz(pred_bbox[bid])  # (Q, 6)
             )  # (gt, Q)
-            #is_correct = (ious.max(0)[0] > 0.25) * 1.0
-            is_correct = (ious.max(0)[0] > 0.) * 1.0
+            is_correct = (ious.max(0)[0] > 0.25) * 1.0
             #is_correct = (ious.max(0)[0] > 0.5) * 1.0
             # Keep scores for annotated objects only
             num_obj = int(end_points['box_label_mask'][bid].sum())

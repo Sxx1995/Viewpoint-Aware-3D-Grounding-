@@ -411,8 +411,10 @@ class SetCriterion(nn.Module):
             #Sem Loss
             gather_S_obj_sem_score = torch.gather(outputs['S_obj_sem_score'], index = (tar_G_obj * (tar_G_obj >= 0)).long().unsqueeze(-1).repeat(1, 1, 45), dim = 1).squeeze()
             gather_S_obj_sem_score = torch.gather(gather_S_obj_sem_score, index = ( outputs['obj_name_id'] * ( outputs['obj_name_id'] >= 0)).long().unsqueeze(-1), dim = 1)
+            gather_G_obj_sem_score = torch.gather(outputs['G_obj_sem_score'], index = ( outputs['obj_name_id'] * ( outputs['obj_name_id'] >= 0)).long().unsqueeze(-1), dim = 1)
+            loss_G_sem = (gather_G_obj_sem_score * (tar_G_obj >= 0)).sum() / ((tar_G_obj >= 0).sum() + 1e-8)
             loss_S_sem = (gather_S_obj_sem_score * (tar_G_obj >= 0)).sum() / ((tar_G_obj >= 0).sum() + 1e-8)
-            loss_dis = loss_dis + (loss_S_sem) * 0.2
+            loss_dis = loss_dis + (loss_S_sem + loss_G_sem) * 0.1
             loss = loss + loss_dis
         else:
             loss_dis = torch.zeros([1]).mean()

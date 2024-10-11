@@ -18,7 +18,6 @@ def unpickle_data(file_name, python2_to_3=False):
             yield cPickle.load(in_file)
     in_file.close()
 q = unpickle_data('DATA_ROOT/train_v3scans.pkl')
-meta_data = json.load(open('DATA_ROOT/scanrefer/ScanRefer_filtered_train_46000.json', 'r'))
 used_object_list = json.load(open('DATA_ROOT/scanrefer_object_names.json', 'r'))
 with open('DATA_ROOT/scanrefer/ScanRefer_filtered_train.txt', 'r') as f:
     scan_ids = [line.rstrip().strip('\n') for line in f.readlines()]
@@ -32,6 +31,4 @@ tmp = []
 for i in syn_meta_data:
     if not i['description'] == '':
         tmp.append(i) 
-#syn_meta_data = meta_data + syn_meta_data
-print("The size of synthetic dataset: %d"%(len(syn_meta_data) - len(meta_data)))
 json.dump(syn_meta_data, open('meta_data_process/scanrefer/ScanRefer_filtered_train.json', 'w'))
